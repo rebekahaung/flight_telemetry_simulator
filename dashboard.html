@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telemetry Dashboard</title>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .dashboard-container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .stat {
+      font-size: 1.6em;
+      margin: 10px 0;
+      color: #555;
+    }
+
+    .stat span {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .timestamp {
+      font-size: 1.2em;
+      color: #7f8c8d;
+      margin-top: 20px;
+    }
+
+    .stat-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+
+    .stat-box {
+      background-color: #ecf0f1;
+      border-radius: 10px;
+      padding: 20px;
+      width: 30%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .stat-box h3 {
+      font-size: 1.2em;
+      color: #34495e;
+      margin-bottom: 10px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .stat-container {
+        flex-direction: column;
+      }
+
+      .stat-box {
+        width: 80%;
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <h1>Telemetry Dashboard</h1>
+
+    <div class="stat-container">
+      <div class="stat-box">
+        <h3>Altitude</h3>
+        <p class="stat"><span id="altitude">--</span> ft</p>
+      </div>
+      <div class="stat-box">
+        <h3>Velocity</h3>
+        <p class="stat"><span id="velocity">--</span> knots</p>
+      </div>
+      <div class="stat-box">
+        <h3>Timestamp</h3>
+        <p class="stat timestamp" id="timestamp">--</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const socket = io();
+
+    socket.on("telemetry", function (data) {
+      document.getElementById("altitude").textContent = data.altitude;
+      document.getElementById("velocity").textContent = data.velocity;
+      document.getElementById("timestamp").textContent = new Date(data.timestamp * 1000).toLocaleTimeString();
+    });
+  </script>
+
+</body>
+</html>
